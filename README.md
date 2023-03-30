@@ -13,7 +13,7 @@ There is a nice disassembly [here](https://gist.github.com/kalj/66b23c440557839b
 
 It looks like the monitor accepts a few commands: sync, echo, read data, write data, and execute. There is also a "register" dump, but it just returns static data. (The code is literally a set of LDA#/send operations. So this is not actually a dump of the CPU registers.) Presumably, the debugger derives the register dump by reading the stack in the NMI cycle and dumping that to a pre-defined memory location. 
 
-To send a command, the PC must send two bytes: $55 $CC. After that, the command byte is transmitted. 
+To send a command, the PC must send two bytes: $55 $AA. After that, the command byte is transmitted. 
 
 Those are:
 
