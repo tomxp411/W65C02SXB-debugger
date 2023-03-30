@@ -13,7 +13,9 @@ There is a nice disassembly [here](https://gist.github.com/kalj/66b23c440557839b
 
 It looks like the monitor accepts a few commands: sync, echo, read data, write data, and execute. There is also a "register" dump, but it just returns static data. (The code is literally a set of LDA#/send operations. So this is not actually a dump of the CPU registers.) Presumably, the debugger derives the register dump by reading the stack in the NMI cycle and dumping that to a pre-defined memory location. 
 
-To send a command, the PC must send two bytes: $55 $AA. After that, the command byte is transmitted. 
+To send a command, the PC must send two bytes: $55 $AA. The system responds with $CC
+
+After that, the PC should send one of the following command bytes:
 
 Those are:
 
@@ -25,8 +27,8 @@ Those are:
 | 03   | write_to_PC / read from dev board: $03, 3 byte address, 2 byte block size. The board then sends back _block size_ bytes of data. |
 | 04   | registers: always returns the same data.
 | 05   | Execute code: TODO: at label `handle_cmd_exec:` in the disassembly (more later)
-| 08   | Appears to send the state of the Carry flag: 00 or 01
-| 09   | Appears to read a byte, then send 01 when the byte sent is not null. Sends 00 otherwise. 
+| 08   | Appears to send the state of the Carry flag: 00 or 01. However, a CLC operation in the routine always clears carrry. So I don't know what the true purpose is.
+| 09   | Appears to read a byte, then send 00. The routine may have once sent 01 when the byte is not null. Purpose unclear. 
 
 
 ## Shadow Registers
@@ -76,5 +78,5 @@ The values ending in hi would be for the 65816, which has the option for 16-bit 
 I have two goals for this project:
 
 1. Write a Windows based debugger/monitor that can be used to view and modify memory on the W65xx dev board. 
-2. Update WDCMon to accept ASCII commands via the USB port. I would like to maintain compatibility with the existing monitor, hooking into the intial startup routine to switch to the text mode monitor when the user sends CR, instead of the $55 $CC sequence. 
+2. Update WDCMon to accept ASCII commands via the USB port. I would like to maintain compatibility with the existing monitor, hooking into the intial startup routine to switch to the text mode monitor when the user sends CR, instead of the $55 $AA sequence. 
 
