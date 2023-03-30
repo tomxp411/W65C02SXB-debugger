@@ -35,6 +35,7 @@ Those are:
 
 Written to by int_save_state (part of the NMI handler) and read by handle_cmd_exec. The idea is that the CPU registers are stored in these memory locations to be inspected by the debugger, and the debugger can modify these values to pre-load the registers prior to calling a routine in memory.
 
+```
 #define STATE_A      $7e00
 #define STATE_Ahi    $7e01
 #define STATE_X      $7e02
@@ -45,9 +46,11 @@ Written to by int_save_state (part of the NMI handler) and read by handle_cmd_ex
 #define STATE_PChi   $7e07
 #define STATE_SP     $7e0a
 #define STATE_P      $7e0c
+```
 
 Other values are saved in the startup routine and then restored by handle_cmd_exec. Presumably this is to allow the system to boot to user code, then break into the monitor without destorying user data stored in Zero Page.
 
+```
 #define STATE_ZP     $7e14
 #define STATE_ZP0    $7e14
 #define STATE_ZP1    $7e15
@@ -61,15 +64,18 @@ Other values are saved in the startup routine and then restored by handle_cmd_ex
 
 #define IRQ_HANDLER_ADDRESS  $7e70
 #define NMI_HANDLER_ADDRESS  $7e72
+```
 
 The "shadow vectors" are addresses for user code that executes after Reset, IRQ, or NMI. This allows you to set up your own NMI handler. I'm not sure if this code executes before or after the debugger has had its turn. 
 
 The USR IRQ Handler always executes after the monitor's IRQ handler. If the ["B" flag](https://www.nesdev.org/wiki/Status_flags#The_B_flag) is set, the user IRQ handler is skipped. B is set when BRK is executed while the CPU is already in an interrupt.
 
+```
 #define SHADOW_VECTOR_BASE       $7efa
 #define USR_NMI_HANDLER_ADDRESS  $7efa
 #define USR_RST_HANDLER_ADDRESS  $7efc
 #define USR_IRQ_HANDLER_ADDRESS  $7efe
+```
 
 The values ending in hi would be for the 65816, which has the option for 16-bit registers. 
 
