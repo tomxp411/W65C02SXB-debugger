@@ -79,7 +79,11 @@ The USR IRQ Handler always executes after the monitor's IRQ handler. If the ["B"
 
 The values ending in hi would be for the 65816, which has the option for 16-bit registers. 
 
-## Plans 
+## Other notes
+
+The VC6502XSB has a 128K FLash ROM, which occupies 32K of address space. So there are 2 address bits not on the system bus. These are accessed by setting The TIDE VIA2's CA2 and CB2 lines. (TODO: expand on this)
+
+## Goals 
 
 I have two goals for this project:
 
